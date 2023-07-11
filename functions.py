@@ -34,6 +34,16 @@ def convert_byte_to_gib(byte):
     return float(gb)
 
 
+def data_base_to_peer_map():
+    global peerMap
+    connection = db.connect()
+    peers = db.get_all_users(connection)
+    connection.close()
+    for peer in peers:
+        p = models.Peer(peer[0], peer[1], peer[2], peer[3], peer[4], peer[5], peer[6], peer[7])
+        peerMap[peer[0]] = p
+
+
 def reload():
     global total, sortedPeer, peerMap
     lines = extract_data()
@@ -41,6 +51,7 @@ def reload():
     connection = db.connect()
     total = db.get_usage_for_name(connection, conf_name)[2]
     tehran_timezone = pytz.timezone('Asia/Tehran')
+    data_base_to_peer_map()
 
     for line in lines:
         line = line.split("\t")
