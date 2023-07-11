@@ -72,9 +72,9 @@ def update_user(conn, peer):
                peer.latest_handshake, peer.transfer, peer.active))
 
 
-def deactivate_user(conn, public_key):
+def deactivate_user(conn, name):
     c = conn.cursor()
-    c.execute("UPDATE users SET active = 0 WHERE public_key = ?", (public_key,))
+    c.execute("UPDATE users SET active = 0 WHERE name = ?", (name,))
 
 
 def set_transfer_to_zero(conn, name):
@@ -82,9 +82,9 @@ def set_transfer_to_zero(conn, name):
     c.execute("UPDATE users SET transfer = 0 WHERE name = ?", (name,))
 
 
-def activate_user(conn, public_key):
+def activate_user(conn, name):
     c = conn.cursor()
-    c.execute("UPDATE users SET active = 1 WHERE public_key = ?", (public_key,))
+    c.execute("UPDATE users SET active = 1 WHERE name = ?", (name,))
 
 
 def make_usage_for_name(conn, name):

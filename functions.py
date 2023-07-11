@@ -7,6 +7,7 @@ import os
 
 import db
 import models
+import sheet
 
 load_dotenv()
 conf_name = os.environ.get("CONF_NAME")
@@ -89,6 +90,7 @@ def reload():
     total = float(total)
     sortedPeer = sorted(peerMap.values(), key=lambda x: x.transfer, reverse=True)
     connection.close()
+    sheet.main()
 
 
 def pause_user(name):
