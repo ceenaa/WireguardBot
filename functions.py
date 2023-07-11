@@ -56,6 +56,8 @@ def reload():
 
         transfer = float(db.get_transfer(connection, public_key)[0])
         transfer += convert_byte_to_gib(float(line[5]) + float(line[6]))
+        transfer = format(transfer, '.2f')
+        transfer = float(transfer)
         total += transfer
         name = db.get_user_name(connection, public_key)
         p = models.Peer(name, public_key, pre_shared_key, endpoint, allowed_ips, latest_handshake, transfer, 1)
