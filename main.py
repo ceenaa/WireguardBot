@@ -137,6 +137,26 @@ def send_paused_users(message):
         bot.send_message(cid, type(err).__name__ + " " + str(err))
 
 
+def usage_request(message):
+    return message.text == "Usage"
+
+
+@bot.message_handler(func=usage_request)
+def send_usage(message):
+    try:
+        connection = db.connect()
+        data = db.get_usage_for_name(connection, functions.conf_name)
+        name = data[0]
+        start_time = data[1]
+        usage = functions.total
+        connection.close()
+        bot.send_message(message.chat.id,
+                         "Name: " + name + "\nStart time: " + start_time + " : " + str(
+                             functions.total_days()) + "days" + "\nUsage: " + usage + " Gib")
+    except Exception as err:
+        bot.send_message(message.chat.id, type(err).__name__ + " " + str(err))
+
+
 def polling():
     bot.infinity_polling(timeout=60, long_polling_timeout=5)
 

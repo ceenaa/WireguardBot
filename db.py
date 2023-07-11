@@ -77,9 +77,9 @@ def deactivate_user(conn, public_key):
     c.execute("UPDATE users SET active = 0 WHERE public_key = ?", (public_key,))
 
 
-def set_transfer_to_zero(conn):
+def set_transfer_to_zero(conn, name):
     c = conn.cursor()
-    c.execute("UPDATE users SET transfer = 0")
+    c.execute("UPDATE users SET transfer = 0 WHERE name = ?", (name,))
 
 
 def activate_user(conn, public_key):
