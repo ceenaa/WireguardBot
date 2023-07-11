@@ -73,8 +73,8 @@ def pause_user(name):
     db.update_user(connection, peerMap[name])
     db.deactivate_user(connection, name)
     connection.commit()
-    connection.close()
     db.add_total_usage_by_name(connection, name, peerMap[name].transfer)
+    connection.close()
     command = f"wg set {sys_name} peer \"{peerMap[name].public_key}\" remove"
     os.system(command)
     command = f"ip -4 route delete {peerMap[name].allowed_ips} dev {conf_name}"
