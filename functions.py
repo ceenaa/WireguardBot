@@ -84,15 +84,16 @@ def pause_user(name):
     reload()
     connection = db.connect()
     db.update_user(connection, peerMap[name])
-    peerMap[name].active = 0
     db.deactivate_user(connection, name)
     connection.commit()
     db.add_total_usage_by_name(connection, name, peerMap[name].transfer)
-    connection.close()
     command = f"wg set {sys_name} peer \"{peerMap[name].public_key}\" remove"
     os.system(command)
     command = f"ip -4 route delete {peerMap[name].allowed_ips} dev {sys_name}"
     os.system(command)
+
+    connection.close()
+    reload()
 
 
 def resume_user(name):
@@ -101,16 +102,15 @@ def resume_user(name):
     connection.commit()
     arr = db.get_user(connection, name)
     p = models.Peer(arr[0], arr[1], arr[2], arr[3], arr[4], arr[5], arr[6], arr[7])
-    command1 = f"wg set {sys_name} peer \"{p.public_key}\" allowed-ips {p.allowed_ips} preshared-key <(echo \"{p.pre_shared_key})\""
+    command1 = f"wg set {sys_name} peer \"{p.public_key}\" allowed-ips {p.allowed_ips} preshared-key <(echo \"{p.pre_shared_key}\")"
     command2 = f"ip -4 route add {p.allowed_ips} dev {sys_name}"
     process1 = subprocess.Popen(command1, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     process1.communicate()
     process2 = subprocess.Popen(command2, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     process2.communicate()
 
-    print(command1)
-    print(command2)
     connection.close()
+    reload()
 
 
 def export():
