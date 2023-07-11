@@ -19,9 +19,10 @@ total = 0
 
 def extract_data():
     file = open("wg.txt", "w")
-    subprocess.Popen(["wg", "show", "wg0", "dump"], stdout=file)
+    wg = subprocess.check_output(f"wg show {sys_name} dump", shell=True)
+    file.write(wg.decode("utf-8"))
     file.close()
-    # file = open("wg.txt", "r")
+    file = open("wg.txt", "r")
     lines = file.readlines()
     file.close()
     return lines
@@ -76,9 +77,9 @@ def pause_user(name):
     connection.close()
     db.add_total_usage_by_name(connection, name, peerMap[name].transfer)
     command = f"wg set {sys_name} peer \"{peerMap[name].public_key}\" remove"
-    subprocess.Popen(command, shell=True)
+    os.system(command)
     command = f"ip -4 route delete {peerMap[name].allowed_ips} dev {conf_name}"
-    subprocess.Popen(command, shell=True)
+    os.system(command)
 
 
 def resume_user(name):
@@ -89,9 +90,9 @@ def resume_user(name):
     p = models.Peer(arr[0], arr[1], arr[2], arr[3], arr[4], arr[5], arr[6], arr[7])
     command = f"wg set {sys_name} peer \"{p.public_key}\" allowed-ips {p.allowed_ips}" \
               f" preshared-key <(echo {p.pre_shared_key})"
-    subprocess.Popen(command, shell=True)
+    os.system(command)
     command = f"ip -4 route add {p.allowed_ips} dev {conf_name}"
-    subprocess.Popen(command, shell=True)
+    os.system(command)
     connection.close()
 
 
