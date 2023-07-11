@@ -77,7 +77,7 @@ def pause_user(name):
     connection.close()
     command = f"wg set {sys_name} peer \"{peerMap[name].public_key}\" remove"
     os.system(command)
-    command = f"ip -4 route delete {peerMap[name].allowed_ips} dev {conf_name}"
+    command = f"ip -4 route delete {peerMap[name].allowed_ips} dev {sys_name}"
     os.system(command)
 
 
@@ -90,7 +90,7 @@ def resume_user(name):
     command = f"wg set {sys_name} peer \"{p.public_key}\" allowed-ips {p.allowed_ips}" \
               f" preshared-key <(echo {p.pre_shared_key})"
     os.system(command)
-    command = f"ip -4 route add {p.allowed_ips} dev {conf_name}"
+    command = f"ip -4 route add {p.allowed_ips} dev {sys_name}"
     os.system(command)
     connection.close()
 
