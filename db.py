@@ -1,6 +1,8 @@
 import datetime
 import sqlite3
 
+import functions
+
 
 def connect():
     return sqlite3.connect("db.sqlite3")
@@ -103,8 +105,8 @@ def add_total_usage_by_name(conn, name, transfer):
 
 def initialize_users(conn):
     c = conn.cursor()
-    # file = open("/etc/wireguard/" + functions.sys_name + ".conf", "r")
-    file = open("peers.txt", "r")
+    file = open("/etc/wireguard/" + functions.sys_name + ".conf", "r")
+    # file = open("peers.txt", "r")
     lines = file.readlines()
     file.close()
     for i in range(13, len(lines), 6):

@@ -18,10 +18,10 @@ total = 0
 
 
 def extract_data():
-    # file = open("wg.txt", "w")
-    # subprocess.Popen(["wg", "show", "wg0", "dump"], stdout=file)
-    # file.close()
-    file = open("wg.txt", "r")
+    file = open("wg.txt", "w")
+    subprocess.Popen(["wg", "show", "wg0", "dump"], stdout=file)
+    file.close()
+    # file = open("wg.txt", "r")
     lines = file.readlines()
     file.close()
     return lines
