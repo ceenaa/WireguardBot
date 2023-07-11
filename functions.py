@@ -104,8 +104,8 @@ def resume_user(name):
     p = models.Peer(arr[0], arr[1], arr[2], arr[3], arr[4], arr[5], arr[6], arr[7])
     command1 = f"wg set {sys_name} peer \"{p.public_key}\" allowed-ips {p.allowed_ips} preshared-key <(echo \"{p.pre_shared_key}\")"
     command2 = f"ip -4 route add {p.allowed_ips} dev {sys_name}"
-    subprocess.run(command1, shell=True)
-    subprocess.run(command2, shell=True)
+    subprocess.run(['bash', '-c', command1])
+    subprocess.run(['bash', '-c', command2])
 
     connection.close()
     reload()
