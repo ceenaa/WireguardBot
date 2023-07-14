@@ -22,6 +22,8 @@ def auto(scheduler):
             continue
         if days[i] == "31" and status[i] == "1":
             functions.pause_user(conf_names[i])
+        if days[i] == "30":
+            break
 
 
 def main():
