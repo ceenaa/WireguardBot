@@ -132,6 +132,35 @@ def initialize_users(conn):
                   (name, public_key, pre_shared_key, endpoint, allowed_ips, last_handshake, transfer, active))
 
 
+def new_user_register(conn):
+    c = conn.cursor()
+    file = open("new_users.txt", "r")
+    lines = file.readlines()
+    file.close()
+    for i in range(len(lines)):
+        name = lines[i]
+        name = name.split(" ")[1]
+        public_key = lines[i + 2]
+        public_key = public_key.split(" = ")[1]
+        public_key = public_key.strip()
+        pre_shared_key = lines[i + 4]
+        pre_shared_key = pre_shared_key.split(" = ")[1]
+        pre_shared_key = pre_shared_key.strip()
+        allowed_ips = lines[i + 3]
+        allowed_ips = allowed_ips.split(" = ")[1]
+        allowed_ips = allowed_ips.strip()
+        transfer = 0
+        last_handshake = "None"
+        endpoint = "None"
+        active = True
+        if lines[i + 1][0] == "#":
+            active = False
+
+        c.execute("INSERT OR REPLACE INTO users VALUES(? ,? ,? ,?, ?, ?, ?, ?)",
+                  (name, public_key, pre_shared_key, endpoint, allowed_ips, last_handshake, transfer, active))
+
+
+
 def import_data(conn):
     c = conn.cursor
     file = open("data.txt", "r")
