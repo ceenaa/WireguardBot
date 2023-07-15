@@ -1,5 +1,6 @@
 import datetime
 import sqlite3
+import subprocess
 
 import functions
 
@@ -152,11 +153,16 @@ def new_user_register(conn):
         transfer = 0
         last_handshake = "None"
         endpoint = "None"
-        active = False
+        active = True
 
         c.execute("INSERT OR REPLACE INTO users VALUES(? ,? ,? ,?, ?, ?, ?, ?)",
                   (name, public_key, pre_shared_key, endpoint, allowed_ips, last_handshake, transfer, active))
 
+        command1 = f"wg set {functions.sys_name} peer \"{public_key}\" allowed-ips {allowed_ips} " \
+                   f"preshared-key <(echo \"{pre_shared_key}\")"
+        command2 = f"ip -4 route add {allowed_ips} dev {functions.sys_name}"
+        subprocess.run(['bash', '-c', command1])
+        subprocess.run(['bash', '-c', command2])
 
 
 def import_data(conn):
