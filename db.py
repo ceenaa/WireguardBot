@@ -152,9 +152,7 @@ def new_user_register(conn):
         transfer = 0
         last_handshake = "None"
         endpoint = "None"
-        active = True
-        if lines[i + 1][0] == "#":
-            active = False
+        active = False
 
         c.execute("INSERT OR REPLACE INTO users VALUES(? ,? ,? ,?, ?, ?, ?, ?)",
                   (name, public_key, pre_shared_key, endpoint, allowed_ips, last_handshake, transfer, active))
