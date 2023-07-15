@@ -137,7 +137,7 @@ def new_user_register(conn):
     file = open("new_users.txt", "r")
     lines = file.readlines()
     file.close()
-    for i in range(len(lines)):
+    for i in range(0, len(lines), 6):
         name = lines[i]
         name = name.split(" ")[1]
         public_key = lines[i + 2]
