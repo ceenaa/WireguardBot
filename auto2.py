@@ -13,17 +13,22 @@ delay_time = 60 * 60 * 24
 
 def auto(scheduler):
     scheduler.enter(delay_time, 1, auto, (scheduler,))
-    conf_names = wks.col_values(3)
-    days = wks.col_values(5)
-    status = wks.col_values(6)
+    try:
+        conf_names = wks.col_values(3)
+        days = wks.col_values(5)
+        status = wks.col_values(6)
 
-    for i in range(len(conf_names)):
-        if conf_names[i] == "conf_name":
-            continue
-        if days[i] == "31" and status[i] == "1":
-            functions.pause_user(conf_names[i])
-        if days[i] == "30":
-            break
+        for i in range(len(conf_names)):
+            if conf_names[i] == "conf_name":
+                continue
+            if functions.peerMap[conf_names[i]] == "":
+                continue
+            if days[i] == "31" and status[i] == "1":
+                functions.pause_user(conf_names[i])
+            if days[i] == "30":
+                break
+    except Exception as err:
+        print(type(err).__name__ + " " + str(err))
 
 
 def main():
