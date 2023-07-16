@@ -21,7 +21,7 @@ def auto(scheduler):
         for i in range(len(conf_names)):
             if conf_names[i] == "conf_name":
                 continue
-            if functions.peerMap[conf_names[i]] == "":
+            if conf_names[i] not in functions.peerMap.keys():
                 continue
             if days[i] == "31" and status[i] == "1":
                 functions.pause_user(conf_names[i])
