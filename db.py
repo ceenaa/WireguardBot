@@ -1,5 +1,6 @@
 import datetime
 import sqlite3
+import subprocess
 
 import functions
 
@@ -130,6 +131,38 @@ def initialize_users(conn):
 
         c.execute("INSERT OR REPLACE INTO users VALUES(? ,? ,? ,?, ?, ?, ?, ?)",
                   (name, public_key, pre_shared_key, endpoint, allowed_ips, last_handshake, transfer, active))
+
+
+def new_user_register(conn):
+    c = conn.cursor()
+    file = open("new_users.txt", "r")
+    lines = file.readlines()
+    file.close()
+    for i in range(0, len(lines), 6):
+        name = lines[i]
+        name = name.split(" ")[1]
+        public_key = lines[i + 2]
+        public_key = public_key.split(" = ")[1]
+        public_key = public_key.strip()
+        pre_shared_key = lines[i + 4]
+        pre_shared_key = pre_shared_key.split(" = ")[1]
+        pre_shared_key = pre_shared_key.strip()
+        allowed_ips = lines[i + 3]
+        allowed_ips = allowed_ips.split(" = ")[1]
+        allowed_ips = allowed_ips.strip()
+        transfer = 0
+        last_handshake = "None"
+        endpoint = "None"
+        active = True
+
+        c.execute("INSERT OR REPLACE INTO users VALUES(? ,? ,? ,?, ?, ?, ?, ?)",
+                  (name, public_key, pre_shared_key, endpoint, allowed_ips, last_handshake, transfer, active))
+
+        command1 = f"wg set {functions.sys_name} peer \"{public_key}\" allowed-ips {allowed_ips} " \
+                   f"preshared-key <(echo \"{pre_shared_key}\")"
+        command2 = f"ip -4 route add {allowed_ips} dev {functions.sys_name}"
+        subprocess.run(['bash', '-c', command1])
+        subprocess.run(['bash', '-c', command2])
 
 
 def import_data(conn):

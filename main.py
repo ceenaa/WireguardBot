@@ -3,6 +3,7 @@ import threading
 
 import telebot
 
+import auto2
 import functions
 import auto
 import db
@@ -164,4 +165,5 @@ def polling():
 functions.reload()
 sheet.main()
 threading.Thread(target=lambda: auto.auto(30 * 60)).start()
+threading.Thread(target=lambda: auto2.main()).start()
 polling()
