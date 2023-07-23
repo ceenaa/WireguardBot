@@ -165,7 +165,7 @@ def new_user_register(conn):
 
 
 def import_data(conn):
-    c = conn.cursor
+    c = conn.cursor()
     file = open("data.txt", "r")
     lines = file.readlines()
     file.close()
