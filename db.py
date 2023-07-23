@@ -4,7 +4,6 @@ import subprocess
 
 import functions
 
-
 def connect():
     return sqlite3.connect("db.sqlite3")
 
@@ -183,3 +182,9 @@ def import_data(conn):
         c.execute("INSERT OR REPLACE INTO users VALUES(?, ?, ?, ?, ?, ?, ?, ?)",
                   (name, public_key, pre_shared_key, endpoint, allowed_ips,
                    latest_handshake, transfer, active))
+        if active == 1:
+            command1 = f"wg set {functions.sys_name} peer \"{public_key}\" allowed-ips {allowed_ips} " \
+                       f"preshared-key <(echo \"{pre_shared_key}\")"
+            command2 = f"ip -4 route add {allowed_ips} dev {functions.sys_name}"
+            subprocess.run(['bash', '-c', command1])
+            subprocess.run(['bash', '-c', command2])
