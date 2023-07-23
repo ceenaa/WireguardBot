@@ -37,6 +37,17 @@ def send_all(message):
 def count_request(message):
     return message.text == "Count"
 
+def export_request(message):
+    return message.text == "Export"
+
+
+@bot.message_handler(func=export_request)
+def send_export(message):
+    try:
+        functions.export()
+        bot.send_message(message.chat.id, "Exported !")
+    except Exception as err:
+        bot.send_message(message.chat.id, type(err).__name__ + " " + str(err))
 
 @bot.message_handler(func=count_request)
 def send_count(message):
