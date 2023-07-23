@@ -179,6 +179,10 @@ def import_data(conn):
         latest_handshake = line[5]
         transfer = line[6]
         active = line[7].strip()
+        if active == "1":
+            active = 1
+        else:
+            active = 0
         c.execute("INSERT OR REPLACE INTO users VALUES(?, ?, ?, ?, ?, ?, ?, ?)",
                   (name, public_key, pre_shared_key, endpoint, allowed_ips,
                    latest_handshake, transfer, active))
