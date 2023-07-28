@@ -21,7 +21,11 @@ def do_something(scheduler):
     functions.export()
     data_limits = wks.col_values(9)
     names = wks.col_values(3)
+    status = wks.col_values(6)
+
     for i in range(1, len(names)):
+        if status[i] == "0":
+            continue
         if names[i] not in functions.peerMap.keys():
             continue
         if data_limits[i] == "0":
