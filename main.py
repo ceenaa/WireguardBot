@@ -37,6 +37,7 @@ def send_all(message):
 def count_request(message):
     return message.text == "Count"
 
+
 def export_request(message):
     return message.text == "Export"
 
@@ -48,6 +49,7 @@ def send_export(message):
         bot.send_message(message.chat.id, "Exported !")
     except Exception as err:
         bot.send_message(message.chat.id, type(err).__name__ + " " + str(err))
+
 
 @bot.message_handler(func=count_request)
 def send_count(message):
@@ -103,6 +105,25 @@ def send_resume(message):
         name = message.text.split(" ")[1]
         functions.resume_user(name)
         bot.send_message(message.chat.id, "Resumed!")
+    except Exception as err:
+        bot.send_message(message.chat.id, type(err).__name__ + " " + str(err))
+
+
+def reset_user(message):
+    if "Reset" in message.text:
+        name = message.text.split(" ")[1]
+        if name in functions.peerMap.keys():
+            return True
+    return False
+
+
+@bot.message_handler(func=reset_user)
+def send_reset(message):
+    try:
+        name = message.text.split(" ")[1]
+        functions.pause_user(name)
+        functions.resume_user(name)
+        bot.send_message(message.chat.id, "Usage has been reset!")
     except Exception as err:
         bot.send_message(message.chat.id, type(err).__name__ + " " + str(err))
 
