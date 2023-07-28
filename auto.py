@@ -7,8 +7,9 @@ from dotenv import load_dotenv
 import functions
 import sheet
 
-load_dotenv()
-max_transfer = float(os.getenv("MAX_TRANSFER"))
+sa = gspread.service_account(filename='keys.json')
+sh = sa.open_by_key(sheet.sheet_id)
+wks = sh.worksheet("Sheet1")
 
 global delay_time
 
@@ -18,11 +19,15 @@ def do_something(scheduler):
     functions.reload()
     sheet.main()
     functions.export()
-    for peer in functions.sortedPeer:
-        if peer.active == 1 and peer.transfer >= max_transfer:
-            functions.pause_user(peer.name)
-        if peer.transfer < max_transfer:
-            break
+    data_limits = wks.col_values(9)
+    names = wks.col_values(3)
+    for i in range(1, len(names)):
+        if names[i] not in functions.peerMap.keys():
+            continue
+        if data_limits[i] == "0":
+            continue
+        if functions.peerMap[names[i]].transfer >= int(data_limits[i]):
+            functions.pause_user(names[i])
 
 
 def auto(delay):
