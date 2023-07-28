@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 
 import functions
 import sheet
+import gspread
 
 sa = gspread.service_account(filename='keys.json')
 sh = sa.open_by_key(sheet.sheet_id)
