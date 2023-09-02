@@ -140,6 +140,10 @@ def new_user_register(conn):
     for i in range(0, len(lines), 6):
         name = lines[i]
         name = name.split(" ")[1]
+        functions.reload()
+        if name in functions.peerMap:
+            if functions.peerMap[name].active:
+                functions.pause_user(name)
         public_key = lines[i + 2]
         public_key = public_key.split(" = ")[1]
         public_key = public_key.strip()
