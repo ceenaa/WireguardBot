@@ -2,8 +2,6 @@ import os
 import threading
 
 import telebot
-
-import auto2
 import functions
 import auto
 import db
