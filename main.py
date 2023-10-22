@@ -190,12 +190,7 @@ def send_usage(message):
         bot.send_message(message.chat.id, type(err).__name__ + " " + str(err))
 
 
-def polling():
-    bot.infinity_polling(timeout=60, long_polling_timeout=5)
-
-
 functions.reload()
 sheet.main()
-threading.Thread(target=lambda: auto.auto(30 * 60)).start()
-threading.Thread(target=lambda: auto2.main()).start()
-polling()
+threading.Thread(target=lambda: auto.auto()).start()
+bot.polling(none_stop=True, interval=0)
