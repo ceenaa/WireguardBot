@@ -32,7 +32,7 @@ def do_something(scheduler):
                 functions.pause_user(names[i])
             elif data_limits[i] == "0":
                 continue
-            elif functions.peerMap[names[i]].transfer >= int(data_limits[i]):
+            elif functions.peerMap[names[i]].transfer >= float(data_limits[i]):
                 functions.pause_user(names[i])
     except Exception as err:
         print(type(err).__name__ + " " + str(err))
